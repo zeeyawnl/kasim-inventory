@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Supplier } from "@/types/Supplier";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 export function useSuppliers() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -11,7 +12,7 @@ export function useSuppliers() {
   const fetchSuppliers = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/suppliers");
+      const res = await fetch(`${getBaseUrl()}/api/suppliers`);
       if (!res.ok) throw new Error("Failed to fetch suppliers");
 
       const data = await res.json();

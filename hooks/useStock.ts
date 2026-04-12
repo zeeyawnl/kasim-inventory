@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 interface StockMovement {
   id: string;
@@ -24,7 +25,7 @@ export function useStock(productId?: string) {
       const params = new URLSearchParams();
       if (productId) params.set("productId", productId);
 
-      const res = await fetch(`/api/stock?${params}`);
+      const res = await fetch(`${getBaseUrl()}/api/stock?${params}`);
       if (!res.ok) throw new Error("Failed to fetch stock movements");
 
       const data = await res.json();

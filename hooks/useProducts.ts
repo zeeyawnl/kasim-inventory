@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 interface Product {
   id: string;
@@ -29,7 +30,7 @@ export function useProducts(filters?: { search?: string; category?: string }) {
       if (filters?.search) params.set("search", filters.search);
       if (filters?.category) params.set("category", filters.category);
 
-      const res = await fetch(`/api/products?${params}`);
+      const res = await fetch(`${getBaseUrl()}/api/products?${params}`);
       if (!res.ok) throw new Error("Failed to fetch products");
 
       const data = await res.json();

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useProducts } from "@/hooks/useProducts";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import Loader from "@/components/common/Loader";
 
 interface CartItem {
@@ -66,7 +67,7 @@ export default function WholesalePOSPage() {
         }))
       };
 
-      const res = await fetch("/api/orders", {
+      const res = await fetch(`${getBaseUrl()}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData)
@@ -193,8 +194,9 @@ export default function WholesalePOSPage() {
       <div className="hidden print:block fixed top-0 left-0 w-screen min-h-screen bg-white z-[9999] p-8 font-mono text-black">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold uppercase tracking-widest border-b-2 border-black pb-2 inline-block">City Shop Centre</h1>
-          <p className="text-lg mt-3">123 Main Street, City Name</p>
-          <p className="text-lg mt-1 font-bold">Contact: +1 234 567 8900</p>
+          <p className="text-lg mt-3">Shop no. B-10, sachdeo arcade, Subhash Rd,</p>
+          <p className="text-lg">Rajwada Nagar, Nashik, Maharashtra 422001</p>
+          <p className="text-lg mt-1 font-bold">Contact: +91 8379898206</p>
           <p className="text-xl mt-4 font-bold border border-black inline-block px-4 py-1 uppercase rounded">Wholesale Invoice</p>
         </div>
 
@@ -237,7 +239,10 @@ export default function WholesalePOSPage() {
 
         <div className="text-center text-xl mt-12 space-y-3 font-bold">
           <p>Thank you for your wholesale business!</p>
-          <p className="text-sm mt-8 opacity-50 font-normal">System Provided by Kasim POS</p>
+          <div className="mt-8 pt-4 flex flex-col items-center opacity-70">
+            <p className="text-sm text-gray-600 font-normal">Software by Zeeya</p>
+            <p className="text-sm text-gray-600 font-normal">Ph: +91 7823842448</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 interface Order {
   id: string;
@@ -23,7 +24,7 @@ export function useOrders(filters?: { type?: string; status?: string }) {
       if (filters?.type) params.set("type", filters.type);
       if (filters?.status) params.set("status", filters.status);
 
-      const res = await fetch(`/api/orders?${params}`);
+      const res = await fetch(`${getBaseUrl()}/api/orders?${params}`);
       if (!res.ok) throw new Error("Failed to fetch orders");
 
       const data = await res.json();

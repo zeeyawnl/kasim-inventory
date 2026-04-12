@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const productService = {
   async getAll(filters?: {
@@ -53,13 +53,13 @@ export const productService = {
   },
 
   async delete(id: string) {
-    return prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx: any) => {
       // Delete related order items first
-      await tx.orderItem.deleteMany({ where: { productId: id } });
+      await (tx as any).orderItem.deleteMany({ where: { productId: id } });
       // Delete related stock movements
-      await tx.stockMovement.deleteMany({ where: { productId: id } });
+      await (tx as any).stockMovement.deleteMany({ where: { productId: id } });
       // Now delete the product
-      return tx.product.delete({ where: { id } });
+      return (tx as any).product.delete({ where: { id } });
     });
   },
 

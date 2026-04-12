@@ -1,24 +1,26 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function DELETE(
   _request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  context: any
 ) {
   try {
-    const { id } = await params;
-    await prisma.$transaction(async (tx) => {
+    const { id } = context.params;
+    await prisma.$transaction(async (tx: any) => {
       // Find all orders for this customer
-      const orders = await tx.order.findMany({ where: { customerId: id }, select: { id: true } });
-      const orderIds = orders.map(o => o.id);
+      const orders = await (tx as any).order.findMany({ where: { customerId: id }, select: { id: true } });
+      const orderIds = orders.map((o: any) => o.id);
       // Delete order items for those orders
       if (orderIds.length > 0) {
-        await tx.orderItem.deleteMany({ where: { orderId: { in: orderIds } } });
+        await (tx as any).orderItem.deleteMany({ where: { orderId: { in: orderIds } } });
       }
       // Delete orders
-      await tx.order.deleteMany({ where: { customerId: id } });
+      await (tx as any).order.deleteMany({ where: { customerId: id } });
       // Delete customer
-      await tx.customer.delete({ where: { id } });
+      await (tx as any).customer.delete({ where: { id } });
     });
     return NextResponse.json({ message: "Customer deleted" });
   } catch (error) {

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductForm from "../components/ProductForm";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 export default function AddProductPage() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function AddProductPage() {
         minStock: Number(data.minStock || 10),
       };
 
-      const res = await fetch("/api/products", {
+      const res = await fetch(`${getBaseUrl()}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

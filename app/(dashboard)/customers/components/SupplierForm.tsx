@@ -3,6 +3,7 @@
 import React from "react";
 import InputField from "@/components/forms/InputField";
 import Button from "@/components/common/Button";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 export default function SupplierForm({ onSubmitSuccess, onCancel }: { onSubmitSuccess?: () => void, onCancel?: () => void }) {
   const [loading, setLoading] = React.useState(false);
@@ -14,7 +15,7 @@ export default function SupplierForm({ onSubmitSuccess, onCancel }: { onSubmitSu
 
     try {
       setLoading(true);
-      const res = await fetch("/api/suppliers", {
+      const res = await fetch(`${getBaseUrl()}/api/suppliers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { orderService } from "@/lib/services/order.service";
 import { orderSchema } from "@/lib/validators/order.schema";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

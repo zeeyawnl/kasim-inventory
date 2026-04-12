@@ -6,6 +6,7 @@ import { useSuppliers } from "@/hooks/useSuppliers";
 import CustomerForm from "./components/CustomerForm";
 import SupplierForm from "./components/SupplierForm";
 import Modal from "@/components/common/Modal";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import Loader from "@/components/common/Loader";
 import DataTable from "@/components/tables/DataTable";
 
@@ -30,7 +31,7 @@ export default function ContactsPage() {
   const handleDeleteCustomer = async (id: string) => {
     if (!confirm("Are you sure you want to delete this customer?")) return;
     try {
-      const res = await fetch(`/api/customers/${id}`, { method: "DELETE" });
+      const res = await fetch(`${getBaseUrl()}/api/customers/${id}`, { method: "DELETE" });
       if (res.ok) {
         refetchCustomers();
       } else {
@@ -45,7 +46,7 @@ export default function ContactsPage() {
   const handleDeleteSupplier = async (id: string) => {
     if (!confirm("Are you sure you want to delete this supplier?")) return;
     try {
-      const res = await fetch(`/api/suppliers/${id}`, { method: "DELETE" });
+      const res = await fetch(`${getBaseUrl()}/api/suppliers/${id}`, { method: "DELETE" });
       if (res.ok) {
         refetchSuppliers();
       } else {

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import ProductTable from "./components/ProductTable";
 import ProductFilters from "./components/ProductFilters";
 import { useProducts } from "@/hooks/useProducts";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import Loader from "@/components/common/Loader";
 
 export default function InventoryPage() {
@@ -21,7 +22,7 @@ export default function InventoryPage() {
     if (!confirm("Are you sure you want to delete this product?")) return;
     
     try {
-      const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
+      const res = await fetch(`${getBaseUrl()}/api/products/${id}`, { method: "DELETE" });
       if (res.ok) {
         refetch();
       } else {

@@ -5,6 +5,7 @@ import InputField from "@/components/forms/InputField";
 import SelectField from "@/components/forms/SelectField";
 import Button from "@/components/common/Button";
 import { useProducts } from "@/hooks/useProducts";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 export default function StockOutForm({ onSuccess }: { onSuccess?: () => void }) {
   const { products } = useProducts();
@@ -18,7 +19,7 @@ export default function StockOutForm({ onSuccess }: { onSuccess?: () => void }) 
 
     try {
       setLoading(true);
-      const res = await fetch("/api/stock", {
+      const res = await fetch(`${getBaseUrl()}/api/stock`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

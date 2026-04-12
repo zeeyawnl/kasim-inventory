@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const orderService = {
   async getAll(filters?: { type?: string; status?: string }) {
@@ -34,8 +34,8 @@ export const orderService = {
   }) {
     const { items, ...orderData } = data;
 
-    return prisma.$transaction(async (tx) => {
-      const order = await tx.order.create({
+    return prisma.$transaction(async (tx: any) => {
+      const order = await (tx as any).order.create({
         data: {
           ...orderData,
           items: {
@@ -47,12 +47,12 @@ export const orderService = {
 
       // Deduct stock for each item
       for (const item of items) {
-        await tx.product.update({
+        await (tx as any).product.update({
           where: { id: item.productId },
           data: { currentStock: { decrement: item.quantity } },
         });
 
-        await tx.stockMovement.create({
+        await (tx as any).stockMovement.create({
           data: {
             productId: item.productId,
             type: "out",

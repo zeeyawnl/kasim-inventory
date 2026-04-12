@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 export function useCustomers() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -10,7 +11,7 @@ export function useCustomers() {
   const fetchCustomers = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/customers");
+      const res = await fetch(`${getBaseUrl()}/api/customers`);
       if (!res.ok) throw new Error("Failed to fetch customers");
 
       const data = await res.json();

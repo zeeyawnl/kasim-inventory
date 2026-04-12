@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { productService } from "@/lib/services/product.service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   _request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  context: any
 ) {
   try {
-    const { id } = await params;
+    const { id } = context.params;
     const product = await productService.getById(id);
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
@@ -20,10 +22,10 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  context: any
 ) {
   try {
-    const { id } = await params;
+    const { id } = context.params;
     const body = await request.json();
     const product = await productService.update(id, body);
     return NextResponse.json(product);
@@ -35,10 +37,10 @@ export async function PUT(
 
 export async function DELETE(
   _request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  context: any
 ) {
   try {
-    const { id } = await params;
+    const { id } = context.params;
     await productService.delete(id);
     return NextResponse.json({ message: "Product deleted" });
   } catch (error) {
