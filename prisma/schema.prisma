@@ -1,33 +1,30 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Product {
-  id            String   @id @default(cuid())
-  name          String
-  sku           String   @unique
-  description   String?
-  category      String
-  unit          String
-  salesChannel  String   @default("both") // retail | wholesale | both
-  retailPrice   Float
+  id             String   @id @default(cuid())
+  name           String
+  sku            String   @unique
+  description    String?
+  category       String
+  unit           String
+  salesChannel   String   @default("both")
+  retailPrice    Float
   wholesalePrice Float
-  costPrice     Float
-  currentStock  Int      @default(0)
-  minStock      Int      @default(10)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  costPrice      Float
+  currentStock   Int      @default(0)
+  minStock       Int      @default(10)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  orderItems    OrderItem[]
+  orderItems     OrderItem[]
   stockMovements StockMovement[]
 }
 
@@ -37,7 +34,7 @@ model Customer {
   email     String?
   phone     String?
   address   String?
-  type      String   @default("retail") // retail | wholesale
+  type      String   @default("retail")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -45,25 +42,25 @@ model Customer {
 }
 
 model Order {
-  id          String   @id @default(cuid())
-  orderNumber String   @unique
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
   customerId  String?
-  type        String   // retail | wholesale
-  status      String   @default("pending") // pending | completed | cancelled
+  type        String
+  status      String      @default("pending")
   subtotal    Float
-  tax         Float    @default(0)
-  discount    Float    @default(0)
+  tax         Float       @default(0)
+  discount    Float       @default(0)
   total       Float
   notes       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  customer    Customer? @relation(fields: [customerId], references: [id])
+  customer    Customer?   @relation(fields: [customerId], references: [id])
   items       OrderItem[]
 }
 
 model OrderItem {
-  id        String @id @default(cuid())
+  id        String  @id @default(cuid())
   orderId   String
   productId String
   quantity  Int
@@ -77,13 +74,13 @@ model OrderItem {
 model StockMovement {
   id        String   @id @default(cuid())
   productId String
-  type      String   // in | out
+  type      String
   quantity  Int
   reason    String?
   reference String?
   createdAt DateTime @default(now())
 
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model Supplier {

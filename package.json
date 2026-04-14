@@ -4,18 +4,16 @@
   "description": "City Shop Centre - Inventory & POS Management System",
   "author": "City Shop Centre",
   "private": true,
-  "main": "electron/main.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "electron:dev": "concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:build": "next build && electron-builder",
-    "dist": "npm run electron:build"
+    "lint": "eslint"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@prisma/client": "^5.22.0",
+    "@stackframe/stack": "^2.7.0",
     "next": "16.2.1",
     "prisma": "^5.22.0",
     "react": "19.2.4",
@@ -24,38 +22,12 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^20.19.39",
+    "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "concurrently": "^9.2.1",
-    "cross-env": "^10.1.0",
-    "electron": "^41.2.0",
-    "electron-builder": "^26.8.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "wait-on": "^9.0.5"
-  },
-  "build": {
-    "appId": "com.cityshopcentre.inventory",
-    "productName": "Kasim Inventory",
-    "files": [
-      "electron/**/*",
-      "package.json"
-    ],
-    "asarUnpack": [
-      "node_modules/.prisma/**/*",
-      "node_modules/@prisma/client/**/*",
-      "node_modules/better-sqlite3/**/*",
-      "node_modules/@prisma/adapter-better-sqlite3/**/*"
-    ],
-    "extraResources": [
-      { "from": ".next/standalone", "to": ".next/standalone" },
-      { "from": ".next/static",     "to": ".next/static" },
-      { "from": "public",           "to": "public" }
-    ],
-    "win": { "target": "nsis" }
+    "typescript": "^5"
   }
 }
