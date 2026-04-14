@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { stackServerApp } from "@/stack";
+import { stackServerApp } from "@/stack/server";
 
 export const dynamic = "force-dynamic";
 
 export async function DELETE(
   _request: Request,
-  context: any
+  context: { params: Promise<{ id: string }> }
 ) {
   const user = await stackServerApp.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     await prisma.$transaction(async (tx: any) => {
       // Find all orders for this customer
       const orders = await (tx as any).order.findMany({ where: { customerId: id }, select: { id: true } });

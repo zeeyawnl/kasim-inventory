@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { customerService } from "@/lib/services/customer.service";
-import { stackServerApp } from "@/stack";
+import { stackServerApp } from "@/stack/server";
 
 export const dynamic = "force-dynamic";
 

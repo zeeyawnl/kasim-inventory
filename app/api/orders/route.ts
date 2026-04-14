@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { orderService } from "@/lib/services/order.service";
 import { orderSchema } from "@/lib/validators/order.schema";
-import { stackServerApp } from "@/stack";
+import { stackServerApp } from "@/stack/server";
 
 export const dynamic = "force-dynamic";
 

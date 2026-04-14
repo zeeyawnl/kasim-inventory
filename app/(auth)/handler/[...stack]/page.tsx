@@ -1,6 +1,9 @@
 import { StackHandler } from "@stackframe/stack";
 import { stackServerApp } from "@/stack/server";
+import React from "react";
 
-export default function Handler(props: any) {
-  return <StackHandler fullPage app={stackServerApp} {...props} />;
+type StackHandlerProps = React.ComponentProps<typeof StackHandler>;
+
+export default async function Handler(props: Omit<StackHandlerProps, "app">) {
+  return <StackHandler fullPage app={stackServerApp} {...(await (props as any))} />;
 }

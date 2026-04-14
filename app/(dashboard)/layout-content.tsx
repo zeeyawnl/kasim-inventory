@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { UserButton } from "@stackframe/stack";
 
 const navItems = [
   {
@@ -122,6 +123,13 @@ export default function DashboardLayoutContent({
             );
           })}
         </nav>
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-50 bg-white">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+            <UserButton />
+            <span className="text-sm font-medium text-gray-600">My Account</span>
+          </div>
+        </div>
       </aside>
 
       {/* Main content */}

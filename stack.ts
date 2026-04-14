@@ -1,5 +1,2 @@
-import { StackServerApp } from "@stackframe/stack";
-
-export const stackServerApp = new StackServerApp({
-  tokenStore: "nextjs-cookie",
-});
+export { stackServerApp } from "./stack/server";
+export { stackClientApp } from "./stack/client";

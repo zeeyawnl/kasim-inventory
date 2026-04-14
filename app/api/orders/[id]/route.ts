@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
 import { orderService } from "@/lib/services/order.service";
-import { stackServerApp } from "@/stack";
+import { stackServerApp } from "@/stack/server";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(
   _request: Request,
-  context: any
+  context: { params: Promise<{ id: string }> }
 ) {
   const user = await stackServerApp.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     const order = await orderService.getById(id);
     if (!order) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
@@ -26,13 +26,13 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  context: any
+  context: { params: Promise<{ id: string }> }
 ) {
   const user = await stackServerApp.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     const { status } = await request.json();
     const order = await orderService.updateStatus(id, status);
     return NextResponse.json(order);
@@ -44,13 +44,13 @@ export async function PATCH(
 
 export async function DELETE(
   _request: Request,
-  context: any
+  context: { params: Promise<{ id: string }> }
 ) {
   const user = await stackServerApp.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     await orderService.delete(id);
     return NextResponse.json({ message: "Order deleted" });
   } catch (error) {

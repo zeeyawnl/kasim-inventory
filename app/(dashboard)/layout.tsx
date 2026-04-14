@@ -1,4 +1,4 @@
-import { stackServerApp } from "@/stack";
+import { stackServerApp } from "@/stack/server";
 import { redirect } from "next/navigation";
 import DashboardLayoutContent from "./layout-content";
 
