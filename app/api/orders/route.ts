@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { orderService } from "@/lib/services/order.service";
 import { orderSchema } from "@/lib/validators/order.schema";
+import { stackServerApp } from "@/stack";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get("type") || undefined;
@@ -19,6 +23,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const body = await request.json();
     const validated = orderSchema.parse(body);

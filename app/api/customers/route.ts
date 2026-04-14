@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { customerService } from "@/lib/services/customer.service";
+import { stackServerApp } from "@/stack";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search") || undefined;
@@ -17,6 +21,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const body = await request.json();
     const customer = await customerService.create(body);

@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { stackServerApp } from "@/stack";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const suppliers = await prisma.supplier.findMany({
       orderBy: { createdAt: 'desc' }
@@ -16,6 +20,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const body = await request.json();
     const supplier = await prisma.supplier.create({

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { orderService } from "@/lib/services/order.service";
+import { stackServerApp } from "@/stack";
 
 export const dynamic = "force-dynamic";
 
@@ -7,6 +8,9 @@ export async function GET(
   _request: Request,
   context: any
 ) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const { id } = context.params;
     const order = await orderService.getById(id);
@@ -24,6 +28,9 @@ export async function PATCH(
   request: Request,
   context: any
 ) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const { id } = context.params;
     const { status } = await request.json();
@@ -39,6 +46,9 @@ export async function DELETE(
   _request: Request,
   context: any
 ) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const { id } = context.params;
     await orderService.delete(id);

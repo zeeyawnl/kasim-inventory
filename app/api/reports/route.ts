@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { stackServerApp } from "@/stack";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const user = await stackServerApp.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get("type") || "summary";
