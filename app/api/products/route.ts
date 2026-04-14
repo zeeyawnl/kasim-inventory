@@ -34,8 +34,6 @@ export async function POST(request: Request) {
     return NextResponse.json(product, { status: 201 });
   } catch (error: any) {
     console.error("Error creating product:", error);
-    // Return detailed error for debugging
-    const errorMessage = error instanceof Error ? error.message : "Failed to create product";
-    return NextResponse.json({ error: errorMessage }, { status: 400 });
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

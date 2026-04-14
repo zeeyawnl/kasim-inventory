@@ -2,8 +2,8 @@ import { prisma } from "@/lib/prisma";
 
 export const stockService = {
   async addStock(productId: string, quantity: number, reason?: string, reference?: string) {
-    return prisma.$transaction(async (tx: any) => {
-      await (tx as any).stockMovement.create({
+    return prisma.$transaction([
+      prisma.stockMovement.create({
         data: {
           productId,
           type: "in",
@@ -11,18 +11,17 @@ export const stockService = {
           reason,
           reference,
         },
-      });
-
-      return (tx as any).product.update({
+      }),
+      prisma.product.update({
         where: { id: productId },
         data: { currentStock: { increment: quantity } },
-      });
-    });
+      }),
+    ]);
   },
 
   async removeStock(productId: string, quantity: number, reason?: string, reference?: string) {
-    return prisma.$transaction(async (tx: any) => {
-      await (tx as any).stockMovement.create({
+    return prisma.$transaction([
+      prisma.stockMovement.create({
         data: {
           productId,
           type: "out",
@@ -30,13 +29,12 @@ export const stockService = {
           reason,
           reference,
         },
-      });
-
-      return (tx as any).product.update({
+      }),
+      prisma.product.update({
         where: { id: productId },
         data: { currentStock: { decrement: quantity } },
-      });
-    });
+      }),
+    ]);
   },
 
   async getMovements(productId?: string) {

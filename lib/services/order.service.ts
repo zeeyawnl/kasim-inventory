@@ -34,37 +34,46 @@ export const orderService = {
   }) {
     const { items, ...orderData } = data;
 
-    return prisma.$transaction(async (tx: any) => {
-      const order = await (tx as any).order.create({
-        data: {
-          ...orderData,
-          items: {
-            create: items,
-          },
-        },
-        include: { items: true },
-      });
-
-      // Deduct stock for each item
-      for (const item of items) {
-        await (tx as any).product.update({
-          where: { id: item.productId },
-          data: { currentStock: { decrement: item.quantity } },
-        });
-
-        await (tx as any).stockMovement.create({
-          data: {
+    const createOrder = prisma.order.create({
+      data: {
+        ...orderData,
+        items: {
+          create: items.map(item => ({
             productId: item.productId,
-            type: "out",
             quantity: item.quantity,
-            reason: "Sale",
-            reference: order.orderNumber,
-          },
-        });
-      }
-
-      return order;
+            price: item.price,
+            total: item.total,
+          })),
+        },
+      },
     });
+
+    const stockUpdates = items.map((item) =>
+      prisma.product.update({
+        where: { id: item.productId },
+        data: { currentStock: { decrement: item.quantity } },
+      })
+    );
+
+    const movementCreates = items.map((item) =>
+      prisma.stockMovement.create({
+        data: {
+          productId: item.productId,
+          type: "out",
+          quantity: item.quantity,
+          reason: "Sale",
+          reference: data.orderNumber,
+        },
+      })
+    );
+
+    const [order] = await prisma.$transaction([
+      createOrder,
+      ...stockUpdates,
+      ...movementCreates,
+    ]);
+
+    return order;
   },
 
   async updateStatus(id: string, status: string) {
